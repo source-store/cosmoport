@@ -119,27 +119,16 @@ public class ShipServiceImpl implements ShipService {
         final Date beforeDate = before == null ? null : new Date(before);
         final List<Ship> list = new ArrayList<>();
 
-        Calendar calendar = new GregorianCalendar();
-        final int yearAfterDate;
-        final int yearBeforeDate;
-        if (afterDate != null){
-            calendar.setTime(afterDate);
-             yearAfterDate = calendar.get(Calendar.YEAR);
-        } else
-            yearAfterDate = -1;
-        if (beforeDate != null){
-            calendar.setTime(beforeDate);
-            yearBeforeDate = calendar.get(Calendar.YEAR);
-        }else
-            yearBeforeDate = -1;
-
-
         shipRepository.findAll().forEach((ship) -> {
             if (name != null && !ship.getName().contains(name)) return;
             if (planet != null && !ship.getPlanet().contains(planet)) return;
             if (shipType != null && ship.getShipType() != shipType) return;
-            if (yearBeforeDate != -1 && ship.getProdDateYear() > yearBeforeDate) return;
-            if (yearAfterDate != -1 && ship.getProdDateYear() < yearAfterDate) return;
+
+
+            if (afterDate != null && ship.getProdDate().before(afterDate) ) return;
+            if (beforeDate != null && ship.getProdDate().after(beforeDate) ) return;
+
+
             if (isUsed != null && ship.getUsed().booleanValue() != isUsed.booleanValue()) return;
             if (minSpeed != null && ship.getSpeed().compareTo(minSpeed) < 0) return;
             if (maxSpeed != null && ship.getSpeed().compareTo(maxSpeed) > 0) return;
