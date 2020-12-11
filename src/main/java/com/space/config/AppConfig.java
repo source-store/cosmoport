@@ -1,13 +1,15 @@
 package com.space.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
+//import org.springframework.context.annotation.Profile;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+//import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -19,13 +21,14 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Properties;
 
-import static org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType.H2;
+//import static org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType.H2;
 
 @Configuration
 @EnableTransactionManagement
 @ComponentScan("com.space.service")
 @EnableJpaRepositories(basePackages = "com.space.repository")
 public class AppConfig {
+    public static final Logger LOGGER = LoggerFactory.getLogger(AppConfig.class);
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
@@ -40,9 +43,10 @@ public class AppConfig {
         return em;
     }
 
-    @Profile("prod")
+//    @Profile("prod")
     @Bean
     public DataSource dataSource() {
+        LOGGER.info("Начало работы программы!!!");
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
         dataSource.setUrl("jdbc:mysql://localhost:3306/cosmoport?serverTimezone=UTC");
@@ -51,6 +55,7 @@ public class AppConfig {
         return dataSource;
     }
 
+    /*
     @Profile("dev")
     @Bean(name = "dataSource")
     public DataSource dataSourceForTests() {
@@ -63,7 +68,7 @@ public class AppConfig {
                 .addScript("test.sql")
                 .build();
     }
-
+*/
     @Bean
     public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
         JpaTransactionManager transactionManager = new JpaTransactionManager();

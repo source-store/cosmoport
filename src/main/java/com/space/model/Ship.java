@@ -1,11 +1,13 @@
 package com.space.model;
 
 import javax.persistence.*;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 @Entity
 @Table(name = "ship")
-public class SpaceShip {
+public class Ship {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,6 +58,13 @@ public class SpaceShip {
     public Date getProdDate() {
         return prodDate;
     }
+
+    public int getProdDateYear() {
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(prodDate);
+        return calendar.get(Calendar.YEAR);
+    }
+
 
     public void setProdDate(Date prodDate) {
         this.prodDate = prodDate;
